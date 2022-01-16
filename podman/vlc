@@ -8,10 +8,10 @@ mkdir -p ${CONFIG_DIR}
 
 if [ $# != 0 ]; then
 	FILE=/home/vlc/Videos/$(basename $1)
-	VOL="-v $(readlink -f $1):${FILE}"
-	ARG=${FILE}
+	VOL="$(readlink -f $1):${FILE}"
+	ARG="${FILE}"
 else
-	VOL="-v ${HOME}/Videos/:/home/vlc/Videos/"
+	VOL="${HOME}/Videos/:/home/vlc/Videos/"
 	ARG=""
 fi
 
@@ -23,9 +23,9 @@ podman run \
 	--name vlc-$(uuidgen) \
 	--rm \
 	--userns keep-id \
-	${VOL} \
+	-v "${VOL}" \
 	-v ${HOME}/.config/vlc/:/home/vlc/.config/vlc/ \
 	-v ${XDG_RUNTIME_DIR}/pulse/native:${XDG_RUNTIME_DIR}/pulse/native:ro \
 	-v /etc/machine-id:/etc/machine-id:ro \
 	-v /tmp/.X11-unix:/tmp/.X11-unix \
-	docker.io/jess/vlc $ARG
+	docker.io/jess/vlc "$ARG"
